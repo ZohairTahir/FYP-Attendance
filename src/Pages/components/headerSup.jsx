@@ -4,6 +4,8 @@ import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import Cookies from "js-cookie";
 import LOGO from "../Assets/logo.png";
+import LOGO1 from "../Assets/contact.png"
+
 import React, { useState, useEffect } from "react";
 
 const navigation = [
@@ -30,28 +32,29 @@ export default function Header() {
     const userId = Cookies.get("userId");
     const userType = Cookies.get("userType");
 
-    axios
-      .get(
-        `http://localhost:5001/profile/profile?userId=${userId}&userType=${userType}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log("response data of profile", response);
-        setUserProfile(response.data.userProfile);
-      })
-      .catch((error) => {
-        console.error("Error fetching user profile data:", error);
-      });
+    // axios
+    //   .get(
+    //     `http://localhost:5001/profile/profile?userId=${userId}&userType=${userType}`,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //         "Content-Type": "application/json",
+    //       },
+    //     }
+    //   )
+    //   .then((response) => {
+    //     console.log("response data of profile", response);
+    //     setUserProfile(response.data.userProfile);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching user profile data:", error);
+    //   });
   }, []);
 
-  const profilePictureUrl = userProfile.profilePicture
-    ? `/${userProfile.profilePicture.split("/").pop()}`
-    : "/public/logo.jpeg";
+  // const profilePictureUrl = userProfile.profilePicture
+  //   ? `/${userProfile.profilePicture.split("/").pop()}`
+  //   : "../Assets/contact.png";
+  const profilePictureUrl = LOGO1
 
   return (
     <Disclosure as="nav" className="bg-blue-900">
@@ -61,7 +64,7 @@ export default function Header() {
             <div className="flex h-16 items-center justify-between">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <img className="h-14 w-25" src={LOGO} alt="SZABIST" />
+                  <img className="h-14 " src={LOGO} alt="SZABIST" />
                 </div>
 
                 <div className="hidden md:block">
@@ -86,14 +89,14 @@ export default function Header() {
               </div>
               <div className="hidden md:block">
                 <div className="ml-4 flex items-center md:ml-6">
-                  <button
+                  {/* <button
                     type="button"
                     className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                   >
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">View notifications</span>
                     <BellIcon className="h-6 w-6" aria-hidden="true" />
-                  </button>
+                  </button> */}
 
                   <Menu as="div" className="relative ml-3">
                     <div className="flex items-center">
@@ -101,7 +104,7 @@ export default function Header() {
                         <span className="absolute -inset-1.5" />
                         <span className="sr-only">Open user menu</span>
                         <img
-                          className="h-8 w-8 rounded-full"
+                          className="h-8 w-8 rounded-full bg-white"
                           src={profilePictureUrl}
                           alt="Profile"
                         />

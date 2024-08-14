@@ -3,8 +3,19 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Header from "../components/headerSup";
-//import Supervisordata from "../../../models/Supervisordata";
-import { ThemeProvider, Box, Typography, createTheme, useRadioGroup } from '@mui/material';
+import {
+  ThemeProvider,
+  Box,
+  Typography,
+  Button,
+  Avatar,
+  Chip,
+  createTheme,
+} from '@mui/material';
+import Card from '@mui/material/Card';
+import CardBody from '@mui/material/CardContent';
+import CardFooter from '@mui/material/CardActions';
+import ZOHAIR from '../assets/zohair.jpg'; // Replace with the correct path to the image
 
 const theme = createTheme({
   palette: {
@@ -18,26 +29,29 @@ const theme = createTheme({
 export default function Home() {
   const [groupCards, setGroupCards] = useState([]);
   const [userIdFromCookie, setUserIdFromCookie] = useState("");
-  const[userEmailFromCookie,setUserEmailFromCookie] = useState("");
+  const [userEmailFromCookie, setUserEmailFromCookie] = useState("");
+
   useEffect(() => {
     const fetchGroupCards = async () => {
       try {
         const userIdFromCookie = Cookies.get("userId");
         const userEmailFromCookie = Cookies.get("email");
-        console.log(userEmailFromCookie)
         setUserIdFromCookie(userIdFromCookie);
         setUserEmailFromCookie(userEmailFromCookie);
+
         const response = await axios.get(
           `http://localhost:5001/grpcrd/author/${userIdFromCookie}/${userEmailFromCookie}`,
         );
-        const reversedCards = response.data.cards.reverse();
-        setGroupCards(reversedCards);
-        }
-        
-     catch (error) {
+        console.log("Homepage Response data:", response.data);
+        const groupCards = response.data.cards;
+        setGroupCards(groupCards);
+
+      
+      } catch (error) {
         console.error("Error fetching group cards:", error.message);
       }
     };
+
     fetchGroupCards();
   }, []);
 
@@ -45,52 +59,82 @@ export default function Home() {
     <ThemeProvider theme={theme}>
       <div className="min-h-full">
         <Header />
-        <header className="bg-[#DEE4EA] shadow">
-          <div className="flex items-center justify-center mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              GROUPS
-            </h1>
-          </div>
-        </header>
 
-        <main className="bg-gray-100">
-          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <Typography variant="h4" component="h1" style={{ fontWeight: 'bold', textAlign: 'center', marginBottom: '20px' }}>
+            Groups 
+            <Chip                
+                    label={
+                          <Typography
+                            variant="small"
+                            color="textPrimary"
+                            className="px-6 font-large capitalize leading-none"
+                            style={{ fontSize: '18px', fontWeight: 'bold' }}
+                          >
+                            {groupCards.length}
+                          </Typography>
+                        }
+                        className="rounded-full py-1.4"
+                        style={{ marginBottom: '1px',}} // Adjust for spacing between chips
+                      />
+            
+          </Typography>
+          <div
+            style={{
+              display: 'inline-flex',
+              flexWrap: 'wrap', // Allows the cards to wrap onto the next line if the screen is too narrow
+              gap: '16px', // Adds space between the cards
+              justifyContent: 'center', // Centers the cards horizontally
+            }}
+          >
             {groupCards.map((card) => (
-              <Link to={`/group/${card._id}`} key={card._id}>
-                <Box
-                  sx={{
-                    width: 300,
-                    height: 200,
-                    borderRadius: 1,
-                    bgcolor: 'primary.main',
-                    color: 'white',
-                    display: 'inline-flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    p: 2,
-                    m: 2,
-                    cursor: 'pointer',
-                    textDecoration: 'none',
-                    '&:hover': {
-                      bgcolor: 'primary.dark',
-                    },
-                  }}
-                >
-                  <Typography variant="h6" component="h2" gutterBottom>
+              <Card className="mt-6 w-96" key={card._id}>
+                <CardBody>
+                  <Typography variant="h5" color="blue-gray" className="mb-2">
                     {card.projectTitle}
                   </Typography>
-                  <Typography variant="body2">
-                    Applicants: {card.applicants.map(applicant => applicant.name).join(', ')}
+                  <Typography>
+                    Supervisor: {card.supervisor}
                   </Typography>
-                  <Typography variant="body2">
-                    Last Updated: {card.lastUpdated}
-                  </Typography>
-                </Box>
-              </Link>
+                  <div className="mt-4">
+                    {card.groupMembers.map((name, index) => (
+                      <Chip
+                        key={index}
+                        // icon={
+                        //   <Avatar
+                        //     size="xs"
+                        //     variant="circular"
+                        //     className="h-mid w-mid -translate-x-0.2"
+                        //     alt={name}
+                        //     src={ZOHAIR} // Replace with dynamic data or a default avatar
+                        //   />
+                        // }
+                        label={
+                          <Typography
+                            variant="small"
+                            color="textPrimary"
+                            className="px-7 font-medium capitalize leading-none"
+                          >
+                            {name}
+                          </Typography>
+                        }
+                        className="rounded-full py-1.5"
+                        style={{ marginBottom: '8px' }} // Adjust for spacing between chips
+                      />
+                    ))}
+                  </div>
+                </CardBody>
+                <CardFooter className="pt-0">
+                <Link to={`/group/${card._id}`}>
+                    <button type="button" className="btn btn-primary" style={{ backgroundColor: 'blue', color: 'white' }}>
+                      View Details
+                    </button>
+                  </Link>
+                </CardFooter>
+              </Card>
             ))}
           </div>
-        </main>
+        </div>
       </div>
     </ThemeProvider>
   );

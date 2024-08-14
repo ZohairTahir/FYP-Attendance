@@ -14,7 +14,7 @@ const register = async (req, res) => {
         return res.status(400).json({ error: "Email is already registered." });
       }
       const hashedPassword = await bcrypt.hash(password, 10);
-      const newUser = new UsersData({ email, password: hashedPassword, userType });
+      const newUser = new UsersData({ email, password: hashedPassword, userType, ...(regno && { regno }) });
       await newUser.save();
       res.status(201).json({ userId: newUser._id, userType, message: "Registration successful" });
     } else if (userType === 'Student') {

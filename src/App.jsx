@@ -7,7 +7,7 @@ import Welcome from "./Pages/Welcome/welcomepage.jsx";
 import Signin from "./Pages/Signin/signin";
 //import Profile from "./Pages/Profile/profile";
 import Register from "./Pages/Signin/register";
-
+import ProjectDetails from "./Pages/ProjectDetails/Details.jsx"
 import ProjectPost from "./Pages/ProjectPost/posting";
 import Profilesetup from "./Pages/Profile/ProfileSetup";
 import UpdateProfileSetup from "./Pages/Profile/updateProfileSetup.jsx";
@@ -26,6 +26,7 @@ function App() {
           <Route path="/homepageStudent" element={<HomepageStudent />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/register" element={<Register />} />
+           <Route path="/group/:id" element={<ProjectDetails/>} />
           {/* <Route path="/profilesetup" element={<Profilesetup />} /> */}
          {/* <Route path="/updateProfileSetup" element={<UpdateProfileSetup />} /> */}
           {/* <Route path="/projectpage" element={<Projectpage />} /> */}

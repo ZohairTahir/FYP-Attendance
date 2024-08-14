@@ -4,7 +4,7 @@ import mongoose from "mongoose";
     regno: {
       type: Number,
      
-      unique: true,
+      unique: true, sparse: true,
     },
     email: {
       type: String,
