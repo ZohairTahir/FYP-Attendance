@@ -9,5 +9,4 @@ router.get("/author/:authorId/:email", GrpController.getGroupCardsByAuthor);
 router.get("/group/:cardId",GrpController.getProjectDesc);
 //router.get("/supervisor/authorId", GrpController.fetchGrpcardsBySupervisor);
 
-
 export default router;

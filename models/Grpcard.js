@@ -37,7 +37,14 @@
       type: String,
       required: true,
     },
-  });
+    tasks: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Task',
+      },
+    ],
+  }, { timestamps: true });
+
 
   const Grpcard = mongoose.model("Grpcard", grpcardSchema);
   export default Grpcard;

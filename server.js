@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import userroute from './routes/UserRoute.js';
 import grpcrdroute from './routes/GrpcardRoutes.js';
+import taskroute from "./routes/TaskRoutes.js"
 import postRoutes from "../Project Updation/routes/postRoutes.js";
 import uroutes from "../Project Updation/routes/URoutes.js";
 import profileroutes from "../Project Updation/routes/profileRoutes.js";
@@ -31,10 +32,15 @@ const connectDB = async () => {
 
 connectDB();
 
-// Define your routes
+app.use((err, req, res, next) => {
+  console.log(req.body)
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
 app.use("/api", userroute);
 app.use("/user", uroutes);
 app.use("/grpcrd", grpcrdroute);
+app.use("/task",taskroute);
 // Uncomment the following lines if these routes are needed
 // app.use("/posts", postRoutes);
 // app.use("/profile", profileroutes);
